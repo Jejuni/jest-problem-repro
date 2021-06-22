@@ -1,0 +1,155 @@
+{
+  "version": 1,
+  "projects": {
+    "jest-problem": {
+      "projectType": "application",
+      "root": "apps/jest-problem",
+      "sourceRoot": "apps/jest-problem/src",
+      "prefix": "jest-problem-repro",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/apps/jest-problem",
+            "index": "apps/jest-problem/src/index.html",
+            "main": "apps/jest-problem/src/main.ts",
+            "polyfills": "apps/jest-problem/src/polyfills.ts",
+            "tsConfig": "apps/jest-problem/tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              "apps/jest-problem/src/favicon.ico",
+              "apps/jest-problem/src/assets"
+            ],
+            "styles": ["apps/jest-problem/src/styles.scss"],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "apps/jest-problem/src/environments/environment.ts",
+                  "with": "apps/jest-problem/src/environments/environment.prod.ts"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "configurations": {
+            "production": {
+              "browserTarget": "jest-problem:build:production"
+            },
+            "development": {
+              "browserTarget": "jest-problem:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "jest-problem:build"
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "apps/jest-problem/src/**/*.ts",
+              "apps/jest-problem/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/jest-problem"],
+          "options": {
+            "jestConfig": "apps/jest-problem/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "jest-problem-e2e": {
+      "root": "apps/jest-problem-e2e",
+      "sourceRoot": "apps/jest-problem-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/jest-problem-e2e/cypress.json",
+            "tsConfig": "apps/jest-problem-e2e/tsconfig.e2e.json",
+            "devServerTarget": "jest-problem:serve:development"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "jest-problem:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/jest-problem-e2e/**/*.{js,ts}"]
+          }
+        }
+      }
+    }
+  },
+  "cli": {
+    "defaultCollection": "@nrwl/angular"
+  },
+  "schematics": {
+    "@nrwl/angular": {
+      "application": {
+        "linter": "eslint"
+      },
+      "library": {
+        "linter": "eslint"
+      },
+      "storybook-configuration": {
+        "linter": "eslint"
+      }
+    },
+    "@nrwl/angular:application": {
+      "style": "scss",
+      "linter": "eslint",
+      "unitTestRunner": "jest",
+      "e2eTestRunner": "cypress"
+    },
+    "@nrwl/angular:library": {
+      "style": "scss",
+      "linter": "eslint",
+      "unitTestRunner": "jest"
+    },
+    "@nrwl/angular:component": {
+      "style": "scss"
+    }
+  },
+  "defaultProject": "jest-problem"
+}
